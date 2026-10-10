@@ -104,7 +104,26 @@ When compiling a comprehensive ancestor biography, family lineage report, or bra
 3. **Deliver Clickable Link**:
    - Link the file to the user as `📄 [Ancestor_Dossier.md](file:///e:/nadia/session/brain/<filename>.md)`.
 
-### 3.7 Memory & Daily Brief Integration
+### 3.7 GEDCOM Ingestion into RAG Vector Memory & Semantic Recall
+
+When given a GEDCOM file (`.ged`), the Genealogist parses and persists the family data into Nadia's long-term RAG vector memory for instant future recall:
+
+1. **Extract Semantic Facts**:
+   - Run `python ../skills/genealogy/gedcom/scripts/gedcom_tool.py memory-facts --file "<path_to_file.ged>"` via `executeSessionCommand`.
+   - The script generates optimized individual summaries (vital events, parents, spouses, children, siblings, residences), family units, and tree overviews.
+2. **Batch Indexing via `saveMemory`**:
+   - For each extracted fact chunk, invoke `saveMemory`:
+     - `content`: `"Genealogical Individual Record: [Name] (ID: [ID]). Born: [Date/Place]. Died: [Date/Place]. Parents: [Parents]. Spouses: [Spouses]. Children: [Children]..."`
+     - `category`: `"genealogy"`
+     - `tags`: `"genealogy, individual, [surname], [given_name], [id]"`
+     - `userId`: `"default"`
+   - Report confirmation of indexed individuals and families to the user.
+3. **Future Knowledge Recall via `searchMemory`**:
+   - When the user asks questions about relatives, ancestors, birth/death years, marriages, or kinship (e.g. *"Who was William Smith's grandfather?"*, *"What year did Sarah Miller die?"*, *"List all relatives born in Illinois"*):
+     - Call `searchMemory(query: "<natural_language_query>", category: "genealogy", topK: 5)`.
+     - Synthesize recalled facts into a direct, cited answer.
+
+### 3.8 Memory & Daily Brief Integration
 
 1. **Daily Brief**:
    - Call `storeBriefEntry` (or `appendBriefEntry`) with `category: "research"`, `staffName: "Genealogist"`, and `code: "genealogy_[surname]"` to document new discoveries.
