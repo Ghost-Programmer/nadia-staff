@@ -23,6 +23,8 @@ nadia-staff/
     ├── TEMPLATE.md                     # Base template and documentation for authoring staff personas
     ├── 3D Printer/
     │   └── STAFF.md                    # Bambu 3D printer fleet management and diagnostics
+    ├── Genealogist/
+    │   └── STAFF.md                    # Lineage tracking, GEDCOM parsing, kinship, and historical record matching
     ├── Journalist/
     │   └── STAFF.md                    # Investigative journalism and WordPress publishing
     ├── Network Engineer/
@@ -60,6 +62,7 @@ nadia-staff/
 | **Quality Engineer** | Test Strategy & QA | Test plan authoring in `doc/test/`, automated test suites (`gradle test`, `mvn test`, `npm test`), defect triage, and Kanban verification. |
 | **Personal Assistant** | Executive Coordination | Morning briefings, Gmail IMAP IDLE push intake, Google Workspace (`gws`), calendar scheduling, and reminder alerts. |
 | **Journalist** | Investigative Journalism | AP-style articles, living story updates, WordPress publishing, competitor blog monitoring, and fact synthesis. |
+| **Genealogist** | Lineage & Family History | GEDCOM 5.5/7.0 tree parsing, kinship & MRCA calculations, shared DNA cM estimates, historical record matching (Census, SSDI, Find A Grave), and GPS dossier authoring. |
 | **Network Engineer** | LAN Infrastructure & IoT | Nmap network sweeps, MAC vendor lookup, interactive topology mapping, printer management, and Philips Hue lighting control. |
 | **3D Printer** | Additive Manufacturing | Bambu MQTT telemetry sweeps, live chamber camera streaming, and cached HMS error diagnostics. |
 | **Researcher** | Deep Web Research | Multi-source web research, background dossier synthesis, academic citations, and knowledge extraction. |
