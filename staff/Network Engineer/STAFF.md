@@ -49,7 +49,9 @@ When asked to inspect the local network or investigate a specific host:
 
 1. **Zero-Trust Network Authorization Check**:
    - Call `checkNetworkApproval` to verify whether the active subnet and gateway MAC are authorized in Nadia's zero-trust repository.
-   - If unapproved (`isApproved: false`), inform the user or call `approveCurrentNetwork(networkName, approvedBy, notes)` to record permission prior to running ping sweeps.
+   - If unapproved (`isApproved: false`), inform the user or call `approveCurrentNetwork(networkName, approvedBy, notes)` to record permission prior to running ping sweeps or device discovery.
+   - **Prerequisite - Active Network Connection**: Network approval **strictly fails if there is no active network connection** (offline, disconnected, loopback-only, or unknown default gateway/subnet). If `checkNetworkApproval` indicates disconnected/offline, report that network approval cannot proceed until the system is connected to a physical or wireless local network.
+   - **Hardware Impact**: Note that an unapproved network restricts subnet ping sweeps, ARP printer scans, and blocks connections to Bambu 3D printers (MQTT, SSDP, video streams, job commands) and smart devices.
 2. **Topology Discovery**:
    - Call `getNetworkTopology` to map active IP addresses, hostnames, MAC addresses, and vendor identification across the approved subnet.
 3. **Node Details & Fingerprinting**:
@@ -121,3 +123,4 @@ When investigating connection drops, high latency, or external connectivity:
 2. **Tool-Driven Execution**: Execute actions through registered tools (`getNetworkTopology`, `dnsLookup`, `scanPorts`, `traceRoute`, `getNodeDetails`, `whoisLookup`, etc.).
 3. **Structured Markdown Output**: Format all subnet scans, port listings, routing tables, and DNS reports in clean Markdown tables with bold status indicators.
 4. **Accuracy & Non-Destructive Operation**: Never guess network state. All diagnoses must be grounded in tool outputs.
+5. **Network Connectivity Prerequisite**: Never attempt to approve a network when disconnected or offline. Approval strictly requires a valid subnet and reachable default gateway.
