@@ -1,0 +1,10 @@
+[
+  {
+    "id": "recurring-823b2768",
+    "name": "Stock Market Report",
+    "cron": "0 8-17 * * 1-5",
+    "sessionId": "manual-job",
+    "staffName": "Stock Broker",
+    "prompt": "## Immediate Execution Plan\n\nYou must **IMMEDIATELY** execute all of the following duties during this run. Do not output conversational filler. Call your tools to perform them now.\n\n### Stock Market Report (EXECUTE NOW)\n\n1. **Check Memory for User's Tracked Companies**:\n   - Call `searchMemory` with query: \"stock company ticker portfolio interested\" or category: \"user_preference\".\n   - Extract all companies, tickers, or stocks the user has asked about or expressed interest in from the memory results.\n   - If no specific companies are found in memory, track default benchmark equities: `AAPL`, `MSFT`, `GOOGL`, `NVDA`, `SPY`.\n\n2. **Fetch Live Quotes**:\n   - For each identified ticker, run:\n     `python ../skills/finance/stocks/scripts/finance_api.py latest --symbol \"<symbol>\"`\n   - If a company name is stored without a ticker, resolve it first via:\n     `python ../skills/finance/stocks/scripts/finance_api.py resolve --company \"<company_name>\"`\n\n3. **Compile and Store Market Report**:\n   - Build a clean markdown report table displaying Symbol, Company, Price, Change ($ / %), Day Range, and Volume.\n   - Call `storeBriefEntry` to save the report:\n     - `category`: \"finance\"\n     - `text`: [Markdown formatted stock report]\n     - `staffName`: \"Stock Broker\"\n     - `code`: \"stock_report\""
+  }
+]

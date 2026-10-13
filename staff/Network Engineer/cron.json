@@ -1,0 +1,18 @@
+[
+  {
+    "id": "recurring-71b56ef2",
+    "name": "External Connectivity Audit",
+    "cron": "0 2 * * *",
+    "sessionId": "manual-job",
+    "staffName": "Network Engineer",
+    "prompt": "## Immediate Execution Plan\n\nYou must **IMMEDIATELY** execute all of the following duties during this run. Do not say what you are going to do or ask for permission. Call your tools to perform them now.\n\n### External Connectivity Audit (EXECUTE NOW)\n\n- Resolve the geographical location of public DNS server `8.8.8.8` using `getGeoLocation`.\n- Perform a traceroute to `8.8.8.8` using `traceRoute` to map the path and latency to the public Internet.\n- Check WHOIS registration details for `google.com` using `whoisLookup`.\n- Compile the connectivity path, geolocation information, and domain registration status in a clean, professional markdown summary.\n- Call `storeBriefEntry` to save the report:\n  - `category`: \"network_diagnostics\"\n  - `text`: [Markdown formatted connectivity audit]\n  - `staffName`: \"Network Engineer\"\n  - `code`: \"external_connectivity_audit\""
+  },
+  {
+    "id": "recurring-9b2c8f1e",
+    "name": "MAC Vendor Database Synchronization",
+    "cron": "0 3 * * 0",
+    "sessionId": "manual-job",
+    "staffName": "Network Engineer",
+    "prompt": "## Immediate Execution Plan\n\nYou must **IMMEDIATELY** execute all of the following duties during this run. Do not say what you are going to do or ask for permission. Call your tools to perform them now.\n\n### MAC Vendor Database Synchronization (EXECUTE NOW)\n\n- Call `syncMacVendors` to download the latest official Nmap MAC prefixes database from GitHub and update the local database with any changes or additions.\n- Extract the synchronization statistics returned by `syncMacVendors` (total parsed, total saved to database, duration).\n- Call `storeBriefEntry` to save the sync status:\n  - `category`: \"network_diagnostics\"\n  - `text`: [Markdown formatted report summarizing the MAC vendor database update and statistics]\n  - `staffName`: \"Network Engineer\"\n  - `code`: \"mac_vendor_db_sync\""
+  }
+]

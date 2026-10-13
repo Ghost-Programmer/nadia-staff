@@ -1,0 +1,34 @@
+[
+  {
+    "id": "recurring-5143f59b",
+    "name": "Blog Monitoring",
+    "cron": "0 6 * * *",
+    "sessionId": "manual-job",
+    "staffName": "Personal Assistant",
+    "prompt": "##  Immediate Execution Plan\n\nYou must **IMMEDIATELY** execute all of the following duties during this run. Do not say what you are going to do or ask for permission. Call your tools to perform them now.\n\n### Blog Monitoring (EXECUTE NOW)\n\n- Call `watchBlog` to check for new posts on the following target URLs:\n  - `https://www.baeldung.com/`\n  - `https://spring.io/blog`\n  - `https://www.infoq.com/news/`"
+  },
+  {
+    "id": "recurring-1ca35761",
+    "name": "Daily Quote",
+    "cron": "0 5 * * *",
+    "sessionId": "manual-job",
+    "staffName": "Personal Assistant",
+    "prompt": "## Immediate Execution Plan\n\nYou must **IMMEDIATELY** execute all of the following duties during this run. Do not say what you are going to do or ask for permission. Call your tools to perform them now.\n\n### Daily Quote (EXECUTE NOW)\n\n- Generate a daily inspirational quote.\n- Format the quote as a markdown blockquote (e.g. `> Quote`).\n- Call `storeBriefEntry` to save the quote:\n  - `category`: \"quote\"\n  - `text`: [Markdown formatted quote]\n  - `staffName`: \"Personal Assistant\"\n  - `code`: \"daily_quote\""
+  },
+  {
+    "id": "recurring-26c15181",
+    "name": "Weather Briefing",
+    "cron": "45 * * * *",
+    "sessionId": "manual-job",
+    "staffName": "Personal Assistant",
+    "prompt": "##  Immediate Execution Plan\n\nYou must **IMMEDIATELY** execute all of the following duties during this run. Do not say what you are going to do or ask for permission. Call your tools to perform them now.\n\n### Weather Briefing (EXECUTE NOW)\n\n- Query the current location using get_ip_location.\n- Fetch the weather forecast for that location.\n- Format the forecast in clean, professional markdown.\n- Call `storeBriefEntry` to save the report:\n  - `category`: \"weather\"\n  - `text`: [Markdown formatted weather report]\n  - `staffName`: \"Personal Assistant\"\n  - `code`: \"weather_forecast\""
+  },
+  {
+    "id": "recurring-8a01f92e",
+    "name": "Daily Morning Brief Report",
+    "cron": "0 8 * * *",
+    "sessionId": "manual-job",
+    "staffName": "Personal Assistant",
+    "prompt": "## Immediate Execution Plan\n\nYou must **IMMEDIATELY** execute all of the following duties during this run. Do not output conversational filler or ask for permission. Call your tools to compile and deliver the Morning Brief Report now.\n\n### Daily Morning Brief Report (EXECUTE NOW)\n\n1. **Retrieve Stored Brief Entries & Current Time**:\n   - Call `getBriefEntries` with `category`: \"all\" to retrieve all stored brief updates from the system (Inspirational Quote, Weather Forecast, Calendar Agenda, Pending TODOs / Action Items, Unread Emails, Tech Blog Monitoring & News, Stock Market Overview, Network Health, and 3D/2D Printer status).\n   - Call `getCurrentDateTime` to obtain the current local date, day of week, and time.\n\n2. **Clear Consumed Brief Entries (Mandatory Anti-Duplication Action)**:\n   - Call `clearBriefEntries` with `category`: \"all\" to wipe the retrieved brief records so that past work and processed items are not duplicated on subsequent briefings.\n\n3. **Compile & Present the Consolidated Morning Executive Briefing**:\n   - Format the complete morning briefing in clean, structured, executive-ready Markdown:\n     - 🌅 **Good Morning Executive Briefing** (Date, Day of Week, and Location)\n     - 💭 **Quote of the Day**\n     - 🌦️ **Weather Forecast** (Conditions, High/Low, Precipitation)\n     - 📅 **Today's Agenda & Schedule** (Upcoming meetings, events, deadlines)\n     - 📝 **Action Items & Pending TODOs** (Pending ADR approvals from Software Architect, project tasks, and system action items)\n     - ✉️ **Important Emails & Highlights** (Key senders, subjects, unread highlights)\n     - 📰 **Tech Blog Monitoring & Industry News** (Recent tech updates, article titles with clickable links `[Title](URL)`, and 2-3 sentence summaries from Blog Watch)\n     - 📈 **Market Overview** (Watched equities, indices)\n     - 🌐 **Network & Infrastructure Status** (Subnet health, gateway ping, DNS)\n     - 🖨️ **Printing Fleet Status** (Active 3D prints, 2D ink/toner supply levels)\n   - Call `storeBriefEntry` to save the consolidated report:\n     - `category`: \"daily_brief\"\n     - `text`: [Markdown formatted consolidated morning brief report]\n     - `staffName`: \"Personal Assistant\"\n     - `code`: \"morning_brief_report\"\n\n4. **Deliver Response to User**:\n   - Output the complete, beautifully formatted Morning Briefing report directly in your final response so the user sees it immediately."
+  }
+]

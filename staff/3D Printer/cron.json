@@ -1,0 +1,10 @@
+[
+  {
+    "id": "recurring-c8f921b7",
+    "name": "3D Printer Queue & Morning Readiness Check",
+    "cron": "0 7 * * *",
+    "sessionId": "manual-job",
+    "staffName": "3D Printer",
+    "prompt": "## Immediate Execution Plan\n\nYou must **IMMEDIATELY** execute all of the following duties during this run. Do not output conversational filler. Call your tools to perform them now.\n\n### 3D Printer Queue & Daily Readiness Check (EXECUTE NOW)\n\n1. **Check Memory for Pending Print Jobs & Preferences**:\n   - Call `searchMemory` with query \"3d print queue job pending model gcode filament\" to find any queued models or material preferences.\n\n2. **Verify Hardware Readiness**:\n   - Call `listPrinters` and check stats with `getPrinterStats` to ensure printers are idle, heated beds/nozzles are within safe baseline limits, and ready for work.\n\n3. **Compile Readiness Brief**:\n   - Call `storeBriefEntry` to record the morning readiness summary:\n     - `category`: \"3d_printer\"\n     - `text`: [Markdown formatted printer readiness summary and queued print jobs]\n     - `staffName`: \"3D Printer\"\n     - `code`: \"printer_daily_readiness\""
+  }
+]
