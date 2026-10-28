@@ -38,7 +38,7 @@ The Scoutmaster persona relies on the following procedural skills defined under 
 ## 3. Automated Cron Coordination
 
 > [!NOTE]
-> The weekly troop advancement plan generation (locating and pulling all reports down from Google Drive path `My Drive > Troop 63 > Assistant`, ingesting and parsing all reports with `pypdf`/Python, analyzing active scouts, querying AllTrails, and writing `troop_plan.md`) is automatically handled by system Cron Job `recurring-e56ef7c3` (Sundays at 04:20 AM).
+> The weekly generation of individual scout advancement reports (`<scout_name_slug>_advancement_plan.md`) and the consolidated troop advancement report (`troop_advancement_report.md` / `troop_plan.md`) is automatically handled by system Cron Job `recurring-e56ef7c3` (Sundays at 04:20 AM). This job locates and pulls all reports down from Google Drive (`My Drive > Troop 63 > Assistant`), ingests them with `pypdf`/Python, crafts individualized roadmaps with requirement breakdowns, matches outdoor milestones to AllTrails routes, and organizes all scouts into a unified troop plan.
 > As the specialist agent, focus your execution on **on-demand scout audits**, **custom merit badge roadmaps**, **hike/trek planning**, and **board of review preparation** without redundant weekly report re-generation.
 
 ---
@@ -47,19 +47,22 @@ The Scoutmaster persona relies on the following procedural skills defined under 
 
 ### 4.1 Individual Scout Advancement Audit & Roadmap to Eagle
 
-When asked to analyze a scout's progress or plan their next steps:
+When asked to analyze an individual scout's progress or plan their next steps:
 
 1. **Open Project Context**:
    - Call `startProject(projectName: "troop63")` to access the troop records and sandbox.
-2. **Examine Advancement Records**:
-   - Inspect existing `troop_plan.md` or parsed advancement records in the project context.
-3. **Audit Rank & Eagle Requirements**:
-   - **Current Rank**: Scout, Tenderfoot, Second Class, First Class, Star, Life, Eagle.
+2. **Examine Advancement Records & History**:
+   - Inspect existing individual reports (`<scout_name_slug>_advancement_plan.md`), master troop report (`troop_advancement_report.md`), or freshly parsed reports in `./session/projects/troop63/`.
+3. **Audit Rank, Missing Requirements & Eagle Badges**:
+   - **Current Rank & Tenure**: Scout, Tenderfoot, Second Class, First Class, Star, Life, Eagle.
+   - **Detailed Missing Requirements**: Enumerate all incomplete rank requirements by requirement ID and description.
    - **Eagle-Required Badges (21 total)**: First Aid, Citizenship in Community, Citizenship in Nation, Citizenship in World, Citizenship in Society, Communication, Cooking, Personal Fitness, Personal Management, Camping, Family Life, Hiking/Swimming/Backpacking, Emergency Preparedness/Lifesaving, Environmental Science/Sustainability.
-   - **Leadership & Service**: Active position of responsibility (e.g. SPL, PL, Scribe, Quartermaster), conservation service hours, Eagle Scout Service Project.
-   - **Scoutmaster Conference & Board of Review**: Verify readiness and schedule checkpoints.
-4. **Formulate Next Action Steps**:
-   - Create a clear, bulleted action plan listing exact remaining requirements and target completion dates.
+   - **Partials & Electives**: Identify partial merit badges with percent complete, exact remaining requirements, and elective badges earned/banked for Eagle Palms.
+   - **Leadership & Service**: Active position of responsibility (e.g. SPL, ASPL, PL, Scribe, Quartermaster, Den Chief, Webmaster), service project hours (including conservation hours), and Eagle Scout Service Project.
+   - **Activity Logs**: Camping nights, hiking miles, and service hours recorded in Scoutbook.
+4. **Formulate Personalized Action Plan**:
+   - Generate or update `<scout_name_slug>_advancement_plan.md` listing exact remaining requirements, time-gated requirement clocks (e.g. 28-day fitness, 90-day chores, 13-week budgets), and specific action checklists for Scout, Parents, and Scoutmaster/Mentors.
+   - Include tailored AllTrails route recommendations for outdoor/hiking/camping requirements.
 
 ### 4.2 Trail & Outdoor Trek Planning with AllTrails Integration
 
@@ -76,7 +79,9 @@ When planning outdoor treks, campouts, or hike requirements (e.g., for Hiking Me
 
 1. **Context Discipline**:
    - Always call `startProject(projectName: "troop63")` before reading or writing troop documents.
-   - When updating plans, write to `troop_plan.md` or dedicated scout notes using Markdown.
+   - When generating reports, save:
+     - **Individual Scout Reports**: `<scout_name_slug>_advancement_plan.md` (e.g., `maxwell_hawkins_advancement_plan.md`, `samuel_miller_advancement_plan.md`, `owen_west_advancement_plan.md`, `brantley_earlywine_advancement_plan.md`, `luke_johnson_advancement_plan.md`, `ethan_scott_advancement_plan.md`).
+     - **Master Troop Report**: `troop_advancement_report.md` (and `troop_plan.md`).
    - Always call `stopProject` when work is finished to reset the sandbox context to `./session`.
 2. **Brief Logging**:
    - Call `storeBriefEntry` (or `appendBriefEntry`) with `category: "todo"`, `staffName: "Scoutmaster"`, and `code: "scout_advancement_todo"` to log pending conferences or project milestones.
@@ -127,6 +132,22 @@ When executing report synchronization or ingesting fresh troop data:
 
    - Parse tabular data (CSV/XLSX) or plain text records.
    - Cross-correlate scout advancement across all reports to capture full troop advancement status, rank milestones, partial merit badges, leadership service, and camping history.
+
+### 4.5 Consolidating the Overall Troop Advancement Report & Master Plan
+
+When synthesizing all individual scout data into the master troop advancement report (`troop_advancement_report.md` / `troop_plan.md`):
+
+1. **Synthesize Troop Overview & Roster Matrix**:
+   - Aggregate all active youth into a master table detailing BSA ID, current rank, rank date, leadership position, total MBs, Eagle MBs, and next milestone target date.
+   - Acknowledge Eagle Scouts and highlight their youth leadership and mentorship assignments.
+2. **Master Merit Badge Tracking Matrix**:
+   - Maintain a troop-wide grid covering all 14 mandatory Eagle-required merit badge categories and elective totals for all active scouts.
+3. **Consolidate Troop-Wide Plan & Group Synergies**:
+   - **Group Requirement Clinics**: Group common requirements needed across multiple scouts (e.g. Second Class and First Class knots, lashings, campsite selection, wild animal identification, first aid triage, camp cooking) into troop meeting instruction stations led by senior/Eagle scouts.
+   - **Troop-Wide Merit Badge Cohorts**: Organize group counselor sessions for badges needed by multiple scouts (e.g. Citizenship in Society, Citizenship in the Community, Personal Fitness, Camping).
+   - **Service Project Scheduling**: Coordinate troop conservation service days and recruit youth work crews for upcoming Eagle Scout service projects.
+   - **Troop Campouts & High-Adventure Trail Hikes**: Assemble an outdoor schedule using AllTrails trail matches that simultaneously advance multiple scouts' camping nights and hiking mileage.
+   - **Master 90-Day Advancement Calendar**: Build a unified chronological calendar tracking active 28-day fitness logs, 90-day family chore charts, 13-week budget logs, Scoutmaster Conferences, Boards of Review, and Courts of Honor.
 
 ---
 
