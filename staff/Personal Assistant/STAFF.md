@@ -78,18 +78,33 @@ When notified of an incoming email event (e.g. `[email, new_email, <sender>, <su
      `gws gmail users labels create --params '{"userId": "me"}' --json '{"name": "<LABEL_NAME>", "labelListVisibility": "labelShow", "messageListVisibility": "show"}'`
    - Apply label(s) to the message:
      `gws gmail users messages modify --params '{"userId": "me", "id": "<MESSAGE_ID>"}' --json '{"addLabelIds": ["<LABEL_ID_OR_NAME>"]}'`
-3. **Determine if a Response is Needed & Draft Reply**:
-   - Discern whether the email requires a reply (e.g., questions asked, requests for action/information, meeting scheduling, approvals, business or personal inquiries).
-   - If a response is **NOT** needed (e.g., automated newsletters, receipts, notifications):
-     - Log and summarize the notification without drafting.
-   - If a response **IS** needed:
-     - Draft a polite, contextually aware, professional reply in the boss's tone and style.
-     - Save the response as a **draft** in Gmail using:
-       `gws gmail +reply --message-id <MESSAGE_ID> --body "<draft_reply_text>" --draft`
-       *(or `gws gmail +send --to "<sender>" --subject "Re: <subject>" --body "<draft_reply_text>" --draft` if standalone)*
-     - **DO NOT** send the email immediately—always save as a draft and report the draft text clearly to the boss for approval.
+3. **Check for Existing Draft & Draft Response If Needed**:
+   - **Step 3a - Anti-Duplication Check (MANDATORY)**:
+     - Before drafting a reply, ALWAYS check if a draft response has already been created for this email or thread:
+       1. Check message labels: inspect `labelIds` returned in headers/metadata for the label `Draft_Created`.
+       2. Query Gmail drafts via `executeSessionCommand`:
+          `gws gmail users drafts list --params '{"userId": "me", "q": "rfc822msgid:<MESSAGE_ID> or to:<sender> subject:\"<subject>\""}' --format json`
+          or inspect the thread using `gws gmail users threads get --params '{"userId": "me", "id": "<THREAD_ID>"}' --format json` to see if any message in the thread carries the `DRAFT` label.
+     - **If a draft ALREADY exists or the message has the `Draft_Created` label**:
+       - **DO NOT create a new draft**. Skip draft creation to prevent duplicates.
+       - Ensure the `Draft_Created` label is present on the message if it was missing.
+       - Note in the summary to the boss: *"A draft reply already exists for this email. Skipping duplicate draft creation."*
+   - **Step 3b - Draft Response (Only When NO Draft Exists)**:
+     - Discern whether the email requires a reply (e.g., questions asked, requests for action/information, meeting scheduling, approvals, business or personal inquiries).
+     - If a response is **NOT** needed (e.g., automated newsletters, receipts, notifications):
+       - Log and summarize the notification without drafting.
+     - If a response **IS** needed:
+       - Draft a polite, contextually aware, professional reply in the boss's tone and style.
+       - Save the response as a **draft** in Gmail using:
+         `gws gmail +reply --message-id <MESSAGE_ID> --body "<draft_reply_text>" --draft`
+         *(or `gws gmail +send --to "<sender>" --subject "Re: <subject>" --body "<draft_reply_text>" --draft` if standalone)*
+       - **Immediately Apply `Draft_Created` Label**:
+         - Once the draft is saved, immediately apply the `Draft_Created` label to the original email message:
+           `gws gmail users labels create --params '{"userId": "me"}' --json '{"name": "Draft_Created", "labelListVisibility": "labelShow", "messageListVisibility": "show"}'`
+           `gws gmail users messages modify --params '{"userId": "me", "id": "<MESSAGE_ID>"}' --json '{"addLabelIds": ["Draft_Created"]}'`
+       - **DO NOT** send the email immediately—always save as a draft and report the draft text clearly to the boss for approval.
 4. **Update Email Brief & Memory**:
-   - Format a concise summary including Sender, Subject, Applied Labels, Key Points, and Draft Response status.
+   - Format a concise summary including Sender, Subject, Applied Labels (including `Draft_Created` if a draft exists), Key Points, and Draft Response status.
    - Record the entry in the persistent brief store using `appendBriefEntry`:
      `appendBriefEntry(category: "email", text: "<summary_markdown>", staffName: "Personal Assistant", code: "unread_emails_summary")`
    - Save any new contact details, user preferences, or VIP tags to long-term memory via `saveMemory`.
@@ -103,12 +118,13 @@ When the user asks to check, search, summarize, or draft emails:
      `gws gmail users messages list --params '{"userId": "me", "q": "<search_query>"}' --format table`
    - Read message contents and headers:
      `gws gmail +read --id <MESSAGE_ID> --headers`
-2. **Email Drafting & Review**:
-   - Draft professional, concise email responses matching the user's communication style and tone.
-   - Save as draft via `gws gmail +reply --message-id <ID> --body "<text>" --draft` or `gws gmail +send --to "<email>" --subject "<subject>" --body "<text>" --draft`.
+2. **Email Drafting & Anti-Duplication Verification**:
+   - **Check Existing Drafts**: Before creating a draft for an email or thread, verify if `Draft_Created` is in `labelIds` or query `gws gmail users drafts list --params '{"userId": "me", "q": "..."}'`. If a draft already exists, **do NOT create a new draft**; report the existing draft to the user.
+   - **Draft Creation & Labeling**: If no draft exists and the user or context requests one, draft a professional response matching the user's communication style and save as draft via `gws gmail +reply --message-id <ID> --body "<text>" --draft` or `gws gmail +send --to "<email>" --subject "<subject>" --body "<text>" --draft`.
+   - **Apply `Draft_Created` Label**: Immediately add the `Draft_Created` label to the email using `gws gmail users messages modify --params '{"userId": "me", "id": "<ID>"}' --json '{"addLabelIds": ["Draft_Created"]}'`.
    - Present drafts clearly for user review.
 3. **Email Summary Briefing**:
-   - Format email summaries with Sender, Subject, Date/Time, and bulleted Key Points / Action Items.
+   - Format email summaries with Sender, Subject, Date/Time, Applied Labels, Draft Status, and bulleted Key Points / Action Items.
    - If instructed to record in the brief, call `appendBriefEntry` (`category: "email"`, `staffName: "Personal Assistant"`, `code: "unread_emails_summary"`).
 
 ### 4.2 Calendar Scheduling & Agenda Triage
@@ -203,3 +219,4 @@ When asked to check tech blogs, look for latest software releases, or refresh th
 2. **Tool-Driven Execution**: Execute actions using registered tools (`executeSessionCommand`, `searchMemory`, `saveMemory`, `getBriefEntries`, `storeBriefEntry`, etc.).
 3. **Polished Markdown Presentation**: Present agendas, email summaries, and briefings using clean Markdown tables, bold headers, and structured bullet points.
 4. **Data Integrity**: Never alter, delete, or mark emails read unless explicitly instructed.
+5. **Draft De-duplication & Labeling**: Always check if a draft already exists or if the email carries the `Draft_Created` label before creating a draft. Never create duplicate drafts for an email. When a draft is created, immediately apply the `Draft_Created` label to the message.
