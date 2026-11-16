@@ -32,7 +32,7 @@ nadia-staff/
     ├── Genealogist/
     │   └── STAFF.md                        # Lineage tracking, GEDCOM 5.5/7.0 parsing, kinship/DNA cM, and record matching
     ├── Journalist/
-    │   └── STAFF.md                        # Investigative journalism, living stories, and WordPress publishing
+    │   └── STAFF.md                        # Investigative journalism, living stories, and WordPress MCP publishing
     ├── Network Engineer/
     │   ├── STAFF.md                        # Zero-trust network authorization, Nmap topology mapping, and IoT hardware
     │   └── cron.json                       # Periodic LAN topology & infrastructure health sweeps
@@ -70,7 +70,7 @@ nadia-staff/
 | **3D Printer** | Additive Manufacturing & Visual QA | `STAFF.md`, `cron.json` | Bambu Lab MQTT telemetry sweeps, live chamber camera streaming (`cam-bambu-<ip>`), **1-minute live print photo inspection** for 4 critical defects (*Clogged/Jammed Extruder*, *Under-Extrusion & Gaps*, *Stringing & Oozing*, *First-Layer Detachment & Warping*) with **automatic print pause (`pausePrintJob`) and Slack `#alert` notification**, cached HMS error diagnostics, and zero-trust network guard. |
 | **Flight Tracker** | Air Traffic & Orbital Tracking | `STAFF.md` | Real-time single-target aircraft (OpenSky ADS-B + FAA Civil Aviation Registry lookup) and orbital satellite (N2YO) tracking on the World Map, viewport boundary monitoring with 18% edge-triggered smooth `panTo` auto-recentering, and live flight intelligence briefings. |
 | **Genealogist** | Lineage & Family History | `STAFF.md` | GEDCOM 5.5/7.0 tree parsing, semantic RAG fact ingestion, kinship & MRCA calculations, shared DNA cM relationship probability estimates, historical record matching (Census, SSDI, Find A Grave), and Genealogical Proof Standard (GPS) dossiers. |
-| **Journalist** | Investigative Journalism | `STAFF.md` | AP-style article drafting, living story synthesis, multi-site WordPress publishing, and competitor blog/RSS monitoring. |
+| **Journalist** | Investigative Journalism | `STAFF.md` | AP-style article drafting, living story synthesis, WordPress publishing via Model Context Protocol (MCP) (`wordpress` MCP server / `mcp_wordpress_*` / `callMcpServerTool`), and competitor blog/RSS monitoring. |
 | **Network Engineer** | LAN Infrastructure & Zero-Trust Security | `STAFF.md`, `cron.json` | Zero-trust network authorization (`checkNetworkApproval`, `approveCurrentNetwork`, `listApprovedNetworks`), Nmap subnet discovery, MAC vendor resolution, interactive topology mapping, 2D/3D printer discovery, and Philips Hue lighting control. |
 | **Personal Assistant** | Executive Coordination & Comms | `STAFF.md`, `cron.json` | Daily executive morning briefings, Gmail IMAP IDLE push intake with mandatory `Draft_Created` label anti-duplication checks, Google Workspace (`gws`) calendar/tasks/docs/drive management, tech blog curation, and pre-meeting alarms. |
 | **Product Manager** | Product Strategy & Discovery | `STAFF.md`, `cron.json` | Nightly trending app/game discovery, competitive teardowns, Product Specifications (PRD/App Spec) in `doc/spec/`, user stories, MoSCoW MVP scoping, and Kanban workflow initiation. |
